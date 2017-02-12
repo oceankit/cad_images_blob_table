@@ -29,5 +29,7 @@ namespace CAD_webapp.Models
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<CAD_webapp.Models.ApplicationUser> ApplicationUsers { get; set; }
     }
 }

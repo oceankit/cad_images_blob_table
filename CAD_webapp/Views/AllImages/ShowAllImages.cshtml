@@ -1,0 +1,24 @@
+﻿@model List<CAD_webapp.Models.ImageEntity>
+@{
+    ViewBag.Title = "ShowAllImages";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    function showImage(image) {
+        var mainImage = document.getElementById('mainImage');
+        mainImage.src = image;
+        mainImage.width = 800;
+    }
+</script>
+
+<h2>All Images:</h2>
+
+<div class="jumbotron">
+    @foreach (var item in Model)
+    {
+        <div class="well well-sm">
+            <img id="mainImage" src="@item.Mini_img" onclick='showImage("@item.Full_img")' />
+        </div>
+    }
+
+</div>

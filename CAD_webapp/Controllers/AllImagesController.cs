@@ -4,16 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using CAD_webapp.Models;
 
 namespace CAD_webapp.Controllers
 {
     public class AllImagesController : Controller
     {
         // GET: AllImages
-        public ActionResult Index()
+        public ActionResult ShowAllImages()
         {
-            
-            return View();
+            var temp = ImgToTheTable.RetrieveAllImages();
+            return View(temp);
         }
     }
 }

@@ -33,5 +33,20 @@ namespace CAD_webapp.Models
             TableOperation insertOperation = TableOperation.Insert(ie);
             table.Execute(insertOperation);
          }
+
+        public static List<ImageEntity> RetrieveAllImages()
+        {
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
+            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
+            CloudTable table = tableClient.GetTableReference("cadtable");
+
+            TableQuery<ImageEntity> query = new TableQuery<ImageEntity>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, "Images"));
+            List<ImageEntity> result = new List<ImageEntity>();
+            foreach(ImageEntity entity in table.ExecuteQuery(query))
+            {
+                result.Add(entity);
+            }
+            return result;
+        }
     }
 }
