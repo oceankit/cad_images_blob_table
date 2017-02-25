@@ -25,13 +25,17 @@ namespace WorkerRole2
         {
             Trace.TraceInformation("WorkerRole is running");
 
-            try
+            while(true)
             {
-                this.RunAsync(this.cancellationTokenSource.Token).Wait();
-            }
-            finally
-            {
-                this.runCompleteEvent.Set();
+                try
+                {
+                    this.RunAsync(this.cancellationTokenSource.Token).Wait();
+                }
+                finally
+                {
+                    this.runCompleteEvent.Set();
+                    Thread.Sleep(10000);
+                }
             }
         }
 
@@ -112,42 +116,47 @@ namespace WorkerRole2
             CloudQueue queue = queueClient.GetQueueReference("cadqueue");
             
             CloudQueueMessage retrievedMessage = queue.GetMessage();
-            string[] msg = retrievedMessage.AsString.Split(' ');
-
-            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
-            CloudTable table = tableClient.GetTableReference("cadtable");
-
-            TableOperation retrieveOperation = TableOperation.Retrieve<ImageEntity>("Images", msg[0]);
-            TableResult retrievedResult = table.Execute(retrieveOperation);
-            var container = GetImageBlobContainer();
-            msg[2] = "mini_" + msg[2];
-            CloudBlockBlob blockBlob = container.GetBlockBlobReference(msg[2]);
-            blockBlob.Properties.ContentType = msg[1];
-
-            Image img;
-            var webClient = new WebClient();
-            byte[] imgBytes = webClient.DownloadData(((ImageEntity)retrievedResult.Result).Full_img);
-            using (var ms = new MemoryStream(imgBytes))
+            
+            if (retrievedMessage.AsString != null || retrievedMessage.AsString != "")
             {
-                img = Image.FromStream(ms);
-            }
-            Image thumb = ScaleImage(img, 220, 160);
-            var fileBytes = imageToByteArray(thumb);
-            await blockBlob.UploadFromByteArrayAsync(fileBytes, 0, fileBytes.Length);
+                string[] msg = retrievedMessage.AsString.Split(' ');
 
-            ImageEntity ent = (ImageEntity)retrievedResult.Result;
-            if (ent != null)
-            {
-                ent.Mini_img = "https://cadwebstorage.blob.core.windows.net/cadblob/" + msg[2];
-                TableOperation insertOrReplaceOperation = TableOperation.InsertOrReplace(ent);
-                table.Execute(insertOrReplaceOperation);
-            }
-            else
-            {
-                Console.WriteLine("Entity could not be retrived.");
-            }
+                CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
+                CloudTable table = tableClient.GetTableReference("cadtable");
 
-            queue.DeleteMessage(retrievedMessage);
+                TableOperation retrieveOperation = TableOperation.Retrieve<ImageEntity>("Images", msg[0]);
+                TableResult retrievedResult = table.Execute(retrieveOperation);
+                var container = GetImageBlobContainer();
+                msg[2] = "mini_" + msg[2];
+                CloudBlockBlob blockBlob = container.GetBlockBlobReference(msg[2]);
+                blockBlob.Properties.ContentType = msg[1];
+
+                Image img;
+                var webClient = new WebClient();
+                byte[] imgBytes = webClient.DownloadData(((ImageEntity)retrievedResult.Result).Full_img);
+                using (var ms = new MemoryStream(imgBytes))
+                {
+                    img = Image.FromStream(ms);
+                }
+                Image thumb = ScaleImage(img, 220, 160);
+                var fileBytes = imageToByteArray(thumb);
+                await blockBlob.UploadFromByteArrayAsync(fileBytes, 0, fileBytes.Length);
+
+                ImageEntity ent = (ImageEntity)retrievedResult.Result;
+                if (ent != null)
+                {
+                    ent.Mini_img = "https://cadwebstorage.blob.core.windows.net/cadblob/" + msg[2];
+                    TableOperation insertOrReplaceOperation = TableOperation.InsertOrReplace(ent);
+                    table.Execute(insertOrReplaceOperation);
+                }
+                else
+                {
+                    Console.WriteLine("Entity could not be retrived.");
+                }
+
+                queue.DeleteMessage(retrievedMessage);
+            }
+            
 
             while (!cancellationToken.IsCancellationRequested)
             {

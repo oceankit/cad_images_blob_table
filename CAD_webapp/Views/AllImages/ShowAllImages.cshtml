@@ -3,21 +3,45 @@
     ViewBag.Title = "ShowAllImages";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<script type="text/javascript">
-    function showImage(image) {
-        var mainImage = document.getElementById('mainImage');
-        mainImage.src = image;
-        mainImage.width = 800;
-    }
+
+<link rel="stylesheet" type="text/css" href="~/Content/custom.css" />
+
+<script>
+// Get the modal
+var modal = document.getElementById('myModal');
+
+// Get the image and insert it inside the modal - use its "alt" text as a caption
+var img = document.getElementById('myImg');
+var modalImg = document.getElementById("img01");
+var captionText = document.getElementById("caption");
+img.onclick = function(){
+    modal.style.display = "block";
+    modalImg.src = this.alt;
+    captionText.innerHTML = this.alt;
+}
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+}
 </script>
 
 <h2>All Images:</h2>
+
+<div id="myModal" class="modal">
+    <span class="close">&times;</span>
+    <img class="modal-content" id="img01">
+    <div id="caption"></div>
+</div>
 
 <div class="jumbotron">
     @foreach (var item in Model)
     {
         <div class="well well-sm">
-            <img id="mainImage" src="@item.Mini_img" onclick='showImage("@item.Full_img")' />
+            <img id="myImg" src="@item.Mini_img" alt="@item.Full_img" />
         </div>
     }
 
