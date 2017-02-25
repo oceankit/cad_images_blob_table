@@ -1,5 +1,7 @@
-﻿using Microsoft.WindowsAzure.Storage;
+﻿using Microsoft.Azure;
+using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.WindowsAzure.Storage.Queue;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -18,7 +20,7 @@ namespace CAD_webapp.Models
     public interface IImageService
     {
         Task<UploadedImage> CreateUploadedImage(HttpPostedFileBase file);
-        Task AddImageToBlobStorageAsync(UploadedImage image);
+        Task AddImageToBlobStorageAsync(ImageEntity ie, UploadedImage image);
     }
 
     public class ImageService : IImageService
@@ -53,12 +55,21 @@ namespace CAD_webapp.Models
             return null;
         }
 
-        public async Task AddImageToBlobStorageAsync(UploadedImage image)
+        public async Task AddImageToBlobStorageAsync(ImageEntity image2, UploadedImage image)
         {
             var container = GetImageBlobContainer();
 
             CloudBlockBlob blockBlob = container.GetBlockBlobReference(image.Name);
             blockBlob.Properties.ContentType = image.ContentType;
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(
+                CloudConfigurationManager.GetSetting("StorageConnectionString"));
+
+            CloudQueueClient queueClient = storageAccount.CreateCloudQueueClient();
+            CloudQueue queue = queueClient.GetQueueReference("cadqueue");
+            queue.CreateIfNotExists();
+            string msg = image2.RowKey + " " + image.ContentType + " " + image.Name;
+            CloudQueueMessage message = new CloudQueueMessage(msg);
+            queue.AddMessage(message);
 
             var fileBytes = image.Data;
             await blockBlob.UploadFromByteArrayAsync(fileBytes, 0, fileBytes.Length);

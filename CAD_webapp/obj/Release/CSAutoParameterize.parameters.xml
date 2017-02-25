@@ -3,7 +3,7 @@
   <parameter name="DefaultConnection-Web.config Connection String" description="DefaultConnection Connection String used in web.config by the application to access the database." defaultValue="Data Source=(LocalDb)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\aspnet-CAD_webapp-20170128011416.mdf;Initial Catalog=aspnet-CAD_webapp-20170128011416;Integrated Security=True" tags="SqlConnectionString">
     <parameterEntry kind="XmlFile" scope="C:\\Users\\Sattar\\Downloads\\C\#\ Folder\\CAD_webapp\\CAD_webapp\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='DefaultConnection']/@connectionString" />
   </parameter>
-  <parameter name="BlobStorageConnectionString-Web.config Connection String" description="BlobStorageConnectionString Connection String used in web.config by the application to access the database." defaultValue="DefaultEndpointsProtocol=https;AccountName=cadwebstorage;AccountKey=IRa6gWSnYJOCX/6cn89k4HDwW2npglfqq6anw3j2wYdmovWBsyMx8tTh1O4+DXMyzIRaAiSRFVQsqIftD3RhIg==;" tags="SqlConnectionString">
+  <parameter name="BlobStorageConnectionString-Web.config Connection String" description="BlobStorageConnectionString Connection String used in web.config by the application to access the database." defaultValue="DefaultEndpointsProtocol=https;AccountName=cadwebstorage;AccountKey=XaIkCaArOs/tXSwK1v3jTUUt/+OOoB/pZKVV0QclJotS35eIbp/Cm1fF7xC90oi/qSMCMZBvLv0EnUCdYNkbsA==;" tags="SqlConnectionString">
     <parameterEntry kind="XmlFile" scope="C:\\Users\\Sattar\\Downloads\\C\#\ Folder\\CAD_webapp\\CAD_webapp\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='BlobStorageConnectionString']/@connectionString" />
   </parameter>
 </parameters>

@@ -38,30 +38,30 @@ namespace CAD_webapp.Controllers
         public async Task<ActionResult> Upload(FormCollection formCollection)
         {
             var model = new UploadedImage();
-            var mini_model = new UploadedImage();
 
             if (Request != null)
             {
                 HttpPostedFileBase file = Request.Files["uploadedFile"];
                 model = await _imageService.CreateUploadedImage(file);
-                await _imageService.AddImageToBlobStorageAsync(model);
+                
 
-                var r = new ImageResizer.ResizeSettings() { MaxWidth = 220, MaxHeight = 160 };
-                file.InputStream.Seek(0, SeekOrigin.Begin);
-                string filePath = Server.MapPath(Url.Content("~/Content/Crop/" + "mini" + file.FileName));
-                ImageResizer.ImageBuilder.Current.Build(file, filePath, r);
-                Image b = Image.FromFile(filePath);
-                byte[] bytes = imageToByteArray(b);
-                mini_model.ContentType = file.ContentType;
-                mini_model.Name = "mini_" + file.FileName;
-                mini_model.Data = bytes;
-                mini_model.Url = string.Format("{0}/{1}", ConfigurationManager.AppSettings["ImageRootPath"], mini_model.Name);
-                await _imageService.AddImageToBlobStorageAsync(mini_model);
+                //var r = new ImageResizer.ResizeSettings() { MaxWidth = 220, MaxHeight = 160 };
+                //file.InputStream.Seek(0, SeekOrigin.Begin);
+                //string filePath = Server.MapPath(Url.Content("~/Content/Crop/" + "mini" + file.FileName));
+                //ImageResizer.ImageBuilder.Current.Build(file, filePath, r);
+                //Image b = Image.FromFile(filePath);
+                //byte[] bytes = imageToByteArray(b);
+                //mini_model.ContentType = file.ContentType;
+                //mini_model.Name = "mini_" + file.FileName;
+                //mini_model.Data = bytes;
+                //mini_model.Url = string.Format("{0}/{1}", ConfigurationManager.AppSettings["ImageRootPath"], mini_model.Name);
+                //await _imageService.AddImageToBlobStorageAsync(mini_model);
 
                 ImageEntity ie = new ImageEntity();
                 ie.Full_img = model.Url;
-                ie.Mini_img = mini_model.Url;
+                //ie.Mini_img = mini_model.Url;
                 ImgToTheTable.CreateIfNotExist(ie);
+                await _imageService.AddImageToBlobStorageAsync(ie, model);
             }
 
             return View("UploadImage", model);

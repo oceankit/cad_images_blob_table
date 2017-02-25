@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="cadworker" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="4" osVersion="*" schemaVersion="2015-04.2.6">
+  <Role name="WorkerRole2">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=cadworker;AccountKey=$(_cadworker.key_)" />
+      <Setting name="APPINSIGHTS_INSTRUMENTATIONKEY" value="c6af3338-a94c-41fc-a127-fd9304d97d4c" />
+    </ConfigurationSettings>
+  </Role>
+</ServiceConfiguration>

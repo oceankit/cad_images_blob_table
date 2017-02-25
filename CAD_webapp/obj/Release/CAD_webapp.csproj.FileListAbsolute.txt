@@ -106,7 +106,6 @@ C:\Users\Sattar\Downloads\C# Folder\CAD_webapp\CAD_webapp\bin\System.Spatial.dll
 C:\Users\Sattar\Downloads\C# Folder\CAD_webapp\CAD_webapp\bin\System.Web.Http.dll
 C:\Users\Sattar\Downloads\C# Folder\CAD_webapp\CAD_webapp\bin\System.Web.Http.WebHost.dll
 C:\Users\Sattar\Downloads\C# Folder\CAD_webapp\CAD_webapp\bin\ImageResizer.xml
-C:\Users\Sattar\Downloads\C# Folder\CAD_webapp\CAD_webapp\bin\Microsoft.Azure.KeyVault.Core.xml
 C:\Users\Sattar\Downloads\C# Folder\CAD_webapp\CAD_webapp\bin\Microsoft.Data.Edm.xml
 C:\Users\Sattar\Downloads\C# Folder\CAD_webapp\CAD_webapp\bin\Microsoft.Data.OData.xml
 C:\Users\Sattar\Downloads\C# Folder\CAD_webapp\CAD_webapp\bin\Microsoft.Data.Services.Client.xml
