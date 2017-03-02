@@ -24,9 +24,6 @@ namespace WorkerRole2
         public override void Run()
         {
             Trace.TraceInformation("WorkerRole is running");
-
-            while(true)
-            {
                 try
                 {
                     this.RunAsync(this.cancellationTokenSource.Token).Wait();
@@ -36,7 +33,6 @@ namespace WorkerRole2
                     this.runCompleteEvent.Set();
                     Thread.Sleep(10000);
                 }
-            }
         }
 
         public override bool OnStart()
@@ -109,6 +105,9 @@ namespace WorkerRole2
         private async Task RunAsync(CancellationToken cancellationToken)
         {
             // TODO: Replace the following with your own logic.
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                Trace.TraceInformation("Working");
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse("DefaultEndpointsProtocol=https;AccountName=cadwebstorage;AccountKey=XaIkCaArOs/tXSwK1v3jTUUt/+OOoB/pZKVV0QclJotS35eIbp/Cm1fF7xC90oi/qSMCMZBvLv0EnUCdYNkbsA==;");
             
             CloudQueueClient queueClient = storageAccount.CreateCloudQueueClient();
@@ -156,11 +155,6 @@ namespace WorkerRole2
 
                 queue.DeleteMessage(retrievedMessage);
             }
-            
-
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                Trace.TraceInformation("Working");
                 await Task.Delay(10000);
             }
         }
